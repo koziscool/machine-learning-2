@@ -4,7 +4,7 @@
 
 class Matrix:
     def __init__(self, elements):
-        self.elements = elements
+        self.elements = elements.copy()
         self.num_rows = len(elements)
         self.num_cols = len(elements[0])
 
@@ -30,6 +30,13 @@ class Matrix:
         copied_elements = [[entry for entry in row] for row in self.elements]
         return Matrix(copied_elements)
 
+    def transpose(self):
+        R = self.new_zero_matrix(self.num_cols, self.num_rows)
+        for i in range(self.num_rows):
+            for j in range(self.num_cols):
+                   R.elements[j][i] = self.elements[i][j]
+        return R
+
     def add(self, M):
         if self.num_rows == M.num_rows and self.num_cols == M.num_cols:
             R = self.new_zero_matrix(self.num_rows, self.num_cols)
@@ -52,3 +59,25 @@ class Matrix:
             for j in range(self.num_cols):
                    R.elements[i][j] = a * self.elements[i][j]
         return R
+
+    def matrix_multiply(self, M):
+        if self.num_cols == M.num_rows:
+            R = self.new_zero_matrix(self.num_rows, M.num_cols)
+            for i in range(self.num_rows):
+                for j in range(M.num_cols):
+                   R.elements[i][j] = dot_product(self.row(i), M.col(j)) 
+            return R
+
+    def print_row( self, r):
+        s = '[' 
+        for i in range(len(self.elements[r]) - 1):
+            s += ' ' + str(self.elements[r][i]) + ' ,'
+        s +=  str(self.elements[r][-1]) + ' ]'
+        print( s )
+
+    def print(self):
+        for r in range(len(self.elements)):
+            self.print_row(r)
+
+
+
