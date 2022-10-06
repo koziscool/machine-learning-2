@@ -151,6 +151,61 @@ class Matrix:
         return ret_M
 
 
+
+
+    def augment(self, B):
+        if self.num_rows != B.num_rows:
+            return None
+
+        ret_M = []
+        for i in range(self.num_rows):
+            temp_arr = []
+            for j in range(self.num_cols):
+                temp_arr.append(self.elements[i][j])
+            for j in range(B.num_cols):
+                temp_arr.append(B.elements[i][j])
+            ret_M.append(temp_arr)
+        return Matrix(ret_M)
+
+    def get_rows(self, row_nums):
+        ret_M = []
+        for i in range(self.num_rows):
+            if i in row_nums:
+                temp_arr = []
+                for j in range(self.num_cols):
+                    temp_arr.append(self.elements[i][j])
+                ret_M.append(temp_arr)
+        return Matrix(ret_M)
+
+    def get_columns(self, col_nums):
+        ret_M = []
+        for i in range(self.num_rows):
+                temp_arr = []
+                for j in range(self.num_cols):
+                    if j in col_nums:
+                        temp_arr.append(self.elements[i][j])
+                ret_M.append(temp_arr)
+        return Matrix(ret_M)
+
+    def inverse(self):
+        if self.num_rows != self.num_cols:
+            print("Error: cannot invert a non-square matrix")
+            return "non-square"
+
+        I = identity_matrix(self.num_rows)
+        M = self.copy().augment(I)
+        RREF = M.rref()
+        identity_range, inverse_range = [*range(self.num_cols)], [*range(self.num_cols, 2*self.num_cols)]            
+        I_test = RREF.get_columns(identity_range)
+        if I.is_equal(I_test):
+            return RREF.get_columns(inverse_range)
+        else:
+            print('Error: cannot invert a singular matrix')
+            return "non-singular"
+
+
+
+
     def print_row( self, r):
         s = '[' 
         for i in range(len(self.elements[r]) - 1):
