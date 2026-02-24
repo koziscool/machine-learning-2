@@ -1,7 +1,9 @@
 
 
 import sys
-sys.path.append('../src')
+import os
+SRC_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'src')
+sys.path.append(SRC_PATH)
 from matrix import Matrix
 
 def unit_test(function_name, arg_tuple, value):
